@@ -1,4 +1,6 @@
-class FiguraGeometrica:
+# Para convertir a una clase en abstracta, es necesario heredar de la clase ABC = Abstract Base Class
+from abc import ABC, abstractmethod
+class FiguraGeometrica(ABC):
     def __init__(self, ancho, alto) -> None:
         if self._validar_valor(ancho):
             self._ancho = ancho
@@ -38,5 +40,11 @@ class FiguraGeometrica:
     
     def _validar_valor(self, valor) -> bool:
         return 0 < valor < 10 
+    
+    # Metodo abstracto para convertir nuestra clase en una clase abstracta
+    # Sirve para obligar a las clases hijas a implementar obligatoriamente estos metodos
+    @abstractmethod
+    def calcular_area(self):
+        pass
 
     

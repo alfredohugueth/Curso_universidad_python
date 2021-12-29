@@ -1,5 +1,9 @@
 from Cuadrado import Cuadrado
+from FiguraGeometrica import FiguraGeometrica
 from Rectangulo import Rectangulo
+
+# No se puede instanciar una clase abstracta
+# figura = FiguraGeometrica(3,3)
 
 cuadrado_1 = Cuadrado('Azul', 5)
 
