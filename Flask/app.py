@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, jsonify
+from flask import Flask, request, render_template, url_for, jsonify, session
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
@@ -8,12 +8,33 @@ from werkzeug.utils import redirect
 
 app = Flask(__name__)
 
+# Agregamos llave secreta para el manejo de sesiones
+app.secret_key = 'Mi llave secreta'
+
 
 # http://localhost:5000/
 @app.route('/')
 def inicio():
-    app.logger.info(f'Entramos al path {request.path}')
-    return 'HOLA MUNDO DESDE FLASK'
+    if 'username' in session:
+        return f'EL USUARIO YA HIZO LOGIN {session["username"]}'
+    return 'EL USUARIO NO HA HECHO LOGIN'
+
+
+@app.route('/login', methods={'GET', 'POST'})
+def login():
+    if request.method == 'POST':
+        # Omitimos validacion de usuario y password
+        usuario = request.form['username']
+        # Agregamos al usuario a la sesion
+        session['username'] = usuario
+        return redirect(url_for('inicio'))
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect(url_for('inicio'))
 
 
 @app.route('/saludar/<nombre>')  # <variable> nos permite recibir variables dentro de la url
@@ -54,3 +75,5 @@ def mostrar_json(nombre):
         'metodo_http': request.method
     }
     return jsonify(valores)  # jsonify convierte el tipo de dato retornado a un diccionario
+
+# Sessions con Cookies ...
